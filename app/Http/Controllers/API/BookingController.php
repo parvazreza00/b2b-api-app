@@ -49,7 +49,86 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $created_at = Carbon::now();
+        $request->validate([
+            'BookingId'   => 'required',
+            'agentId'     => 'required',
+            'email'       => 'required|unique:bookings',
+            'phone'       => 'required|unique:bookings',
+            'pnr'         => 'required',
+            'tripType'    => 'required',
+            'pax'         => 'required',
+            'adultCount'  => 'required',
+            'childCount'  => 'required',
+            'infantCount' => 'required',
+            'netCost'     => 'required',
+            'adultCostBase' => 'required',
+            'childCostBase' => 'required',
+            'infantCostBase'=> 'required',
+            'adultCostTax'  => 'required',
+            'childCostTax'  => 'required',
+            'infantCostTax' => 'required',
+            'grossCost'     => 'required',
+            'baseFare'      => 'required',
+            'Tax'           => 'required',
+            'deptFrom'      => 'required',
+            'airlines'      => 'required',
+            'arriveTo'      => 'required',
+            'gds'           => 'required',
+            'status'        => 'required',
+            'dateTime'      => 'required',
+            'issueTime'     => 'required',
+            'timeLimit'     => 'required'           
+        ]);  
+        $header = $request->header("Authorization");
+        if($header==''){
+            $message = "Authorization is required";
+            return response()->json(['Message'=>$message], 422);
+        }else{
+            if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
+                $stroeBookingData = Booking::insert([
+                    'BookingId'=> $request->BookingId,
+                    'agentId'=> $request->agentId,
+                    'email'=> $request->email,
+                    'phone'=> $request->phone,
+                    'name'=> $request->name,
+                    'pnr'=> $request->pnr,
+                    'tripType'=> $request->tripType,
+                    'pax'=> $request->pax,
+                    'adultCount'=> $request->adultCount,
+                    'childCount'=> $request->childCount,
+                    'infantCount'=> $request->infantCount,
+                    'netCost'=> $request->netCost,
+                    'adultCostBase'=> $request->adultCostBase,
+                    'childCostBase'=> $request->childCostBase,
+                    'infantCostBase'=> $request->infantCostBase,
+                    'adultCostTax'=> $request->adultCostTax,
+                    'childCostTax'=> $request->childCostTax,
+                    'infantCostTax'=> $request->infantCostTax,
+                    'grossCost'=> $request->grossCost,
+                    'baseFare'=> $request->baseFare,
+                    'Tax'=> $request->Tax,
+                    'deptFrom'=> $request->deptFrom,
+                    'airlines'=> $request->airlines,
+                    'arriveTo'=> $request->arriveTo,
+                    'gds'=> $request->gds,
+                    'status'=> $request->status,
+                    'dateTime'=> $request->dateTime,
+                    'issueTime'=> $request->issueTime,
+                    'timeLimit'=> $request->timeLimit,
+                    'created_at'=> $created_at
+                    
+                ]); 
+                return response()->json([
+                    'success' => 'Success', 
+                    'Booking' => $stroeBookingData,           
+                ]);
+            }else{
+                $message="Authorization Token is miss-matched";
+                return response()->json(['Message'=>$message], 422);
+            }            
+        }
+
     }
 
     /**
@@ -69,9 +148,21 @@ class BookingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        $header=$request->header('Authorization');
+        if($header==''){
+            $message = "Authorization is required";
+            return response()->json(['message'=>$message], 422);
+        }else{
+            if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
+                $editClient = Booking::findOrFail($id);
+                return response()->json($editClient);
+            }else{
+                $message = "Authorization Token is miss-matched";
+                return response()->json(['message'=>$message], 422);
+            }
+        }
     }
 
     /**
@@ -83,7 +174,54 @@ class BookingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $updated_at = Carbon::now();
+
+        $header=$request->header("Authorization");
+        if($header==''){
+            $message="Authorization is required";
+            return response()->json(['msessage'=>$message], 422);
+        }else{
+            if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
+                Booking::findOrFail($id)->update([
+                    'BookingId'=> $request->BookingId,
+                    'agentId'=> $request->agentId,
+                    'email'=> $request->email,
+                    'phone'=> $request->phone,
+                    'name'=> $request->name,
+                    'pnr'=> $request->pnr,
+                    'tripType'=> $request->tripType,
+                    'pax'=> $request->pax,
+                    'adultCount'=> $request->adultCount,
+                    'childCount'=> $request->childCount,
+                    'infantCount'=> $request->infantCount,
+                    'netCost'=> $request->netCost,
+                    'adultCostBase'=> $request->adultCostBase,
+                    'childCostBase'=> $request->childCostBase,
+                    'infantCostBase'=> $request->infantCostBase,
+                    'adultCostTax'=> $request->adultCostTax,
+                    'childCostTax'=> $request->childCostTax,
+                    'infantCostTax'=> $request->infantCostTax,
+                    'grossCost'=> $request->grossCost,
+                    'baseFare'=> $request->baseFare,
+                    'Tax'=> $request->Tax,
+                    'deptFrom'=> $request->deptFrom,
+                    'airlines'=> $request->airlines,
+                    'arriveTo'=> $request->arriveTo,
+                    'gds'=> $request->gds,
+                    'status'=> $request->status,
+                    'dateTime'=> $request->dateTime,
+                    'issueTime'=> $request->issueTime,
+                    'timeLimit'=> $request->timeLimit,
+                    'updated_at' => $updated_at
+                ]);
+                return response()->json([
+                    'success' => 'Update Successfully',                       
+                ]);
+            }else{
+                $message="Authorization Token is miss-matched";
+                return response()->json(['msessage'=>$message], 422);
+            }
+        }
     }
 
     /**
@@ -92,8 +230,22 @@ class BookingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $header = $request->header('Authorization');
+        if($header==''){
+            $message = "Authorization is required";
+            return response()->json(['message' => $message], 422);
+        }else{
+            if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
+                Booking::findOrFail($id)->delete();
+                return response()->json([
+                'Delete' => "Deleted successfully",
+                ]);
+            }else{
+                $message = "Authorization Token is miss-mathced";
+                return response()->json(['message' => $message], 422);
+            }
+        }
     }
 }

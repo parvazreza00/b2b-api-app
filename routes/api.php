@@ -29,7 +29,7 @@ Route::delete('/deleteclient/{id}', [clientController::class, 'destroy']);
 
 //booking information route
 Route::get('/allbooking', [BookingController::class, 'index']);
-// Route::post('/store_booking', [BookingController::class, 'store']);
-// Route::get('/editbooking/{id}', [BookingController::class, 'edit']);
-// Route::put('/updatebooking/{id}', [BookingController::class, 'update']);
-// Route::delete('/deletebooking/{id}', [BookingController::class, 'destroy']);
+Route::post('/store_booking', [BookingController::class, 'store']);
+Route::get('/editbooking/{id}', [BookingController::class, 'edit']);
+Route::put('/updatebooking/{id}', [BookingController::class, 'update']);
+Route::delete('/deletebooking/{id}', [BookingController::class, 'destroy']);

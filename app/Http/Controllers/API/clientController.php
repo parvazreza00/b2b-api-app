@@ -54,8 +54,6 @@ class clientController extends Controller
     {
         $joinAt = Carbon::now();
 
-        
-
         $request->validate([
             'agentId'        => 'required',
             'name'           => 'required',
