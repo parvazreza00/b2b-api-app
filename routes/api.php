@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\clientController;
+use App\Http\Controllers\API\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +20,16 @@ use App\Http\Controllers\API\clientController;
 //     return $request->user();
 // });
 
-//employee information route
+//client/Agent information route
 Route::get('/allclients', [clientController::class, 'index']);
 Route::post('/store_clients', [clientController::class, 'store']);
-// Route::get('/editemployee/{id}', [EmployeeController::class, 'editEmployee']);
-// Route::put('/updateemployee/{id}', [EmployeeController::class, 'updateEmployee']);
-// Route::delete('/deleteemployee/{id}', [EmployeeController::class, 'deleteEmployee']);
+Route::get('/editclient/{id}', [clientController::class, 'edit']);
+Route::put('/updateclient/{id}', [clientController::class, 'update']);
+Route::delete('/deleteclient/{id}', [clientController::class, 'destroy']);
+
+//booking information route
+Route::get('/allbooking', [BookingController::class, 'index']);
+// Route::post('/store_booking', [BookingController::class, 'store']);
+// Route::get('/editbooking/{id}', [BookingController::class, 'edit']);
+// Route::put('/updatebooking/{id}', [BookingController::class, 'update']);
+// Route::delete('/deletebooking/{id}', [BookingController::class, 'destroy']);
