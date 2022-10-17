@@ -4,10 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Ticketing;
+use App\Models\Deposit_request;
 use Carbon\Carbon;
 
-class TicketingController extends Controller
+class Deposit_requestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,7 +22,7 @@ class TicketingController extends Controller
             return response()->json(['Message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $bookingdata = Ticketing::all();
+                $bookingdata = Deposit_request::all();
                 return response()->json($bookingdata);
             }else{
                 $message = "Authorization Token is miss-matched";
@@ -50,17 +50,21 @@ class TicketingController extends Controller
     public function store(Request $request)
     {
         $created_at = Carbon::now();
-        $request->validate([
-               'invoiceId'  =>'required',         
-               'agentId'    =>'required',         
-               'BookingId'  =>'required',         
-               'stuffId'    =>'required',         
-               'route'      =>'required',         
-               'cost'       =>'required',         
-               'type'       =>'required',         
-               'airlines'   =>'required',         
-               'issueTime'  =>'required',         
-               'status'     =>'required'                        
+        $datetime = Carbon::now();
+
+        $request->validate([       
+               'agentId'        =>'required',         
+               'depositId'      =>'required',         
+               'sender'         =>'required',         
+               'reciever'       =>'required',         
+               'paymentway'     =>'required',         
+               'paymentmethod'  =>'required',         
+               'transactionId'  =>'required',         
+               'ref'            =>'required',         
+               'amount'         =>'required',                        
+               'attachment'     =>'required',                                    
+               'status'         =>'required',                       
+               'remarks'        =>'required',                       
         ]);  
 
         $header = $request->header("Authorization");
@@ -69,22 +73,25 @@ class TicketingController extends Controller
             return response()->json(['Message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $storeTicketingData = Ticketing::insert([
-                    'invoiceId'     => $request->invoiceId,
-                    'agentId'       => $request->agentId,
-                    'BookingId'     => $request->BookingId,
-                    'stuffId'       => $request->stuffId,
-                    'route'         => $request->route,
-                    'cost'          => $request->cost,
-                    'type'          => $request->type,
-                    'airlines'      => $request->airlines,
-                    'issueTime'     => $request->issueTime,
-                    'status'        => $request->status,
-                    'created_at'    => $created_at                
+                $storeDepositRequestData = Deposit_request::insert([                    
+                    'agentId'           => $request->agentId,
+                    'depositId'         => $request->depositId,
+                    'sender'            => $request->sender,
+                    'reciever'          => $request->reciever,
+                    'paymentway'        => $request->paymentway,
+                    'paymentmethod'     => $request->paymentmethod,
+                    'transactionId'     => $request->transactionId,
+                    'ref'               => $request->ref,
+                    'amount'            => $request->amount,
+                    'attachment'        => $request->attachment,
+                    'dateTime'          => $datetime,
+                    'status'            => $request->status,
+                    'remarks'           => $request->remarks,
+                    'created_at'        => $created_at                
                 ]); 
                 return response()->json([
                     'success' => 'Success', 
-                    'Ticketing' => $storeTicketingData,           
+                    'Ticketing' => $storeDepositRequestData,           
                 ]);
             }else{
                 $message="Authorization Token is miss-matched";
@@ -101,7 +108,7 @@ class TicketingController extends Controller
      */
     public function show($id)
     {
-        
+        //
     }
 
     /**
@@ -118,8 +125,8 @@ class TicketingController extends Controller
             return response()->json(['message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $editticketing = Ticketing::findOrFail($id);
-                return response()->json($editticketing);
+                $edit_Deposit_request = Deposit_request::findOrFail($id);
+                return response()->json($edit_Deposit_request);
             }else{
                 $message = "Authorization Token is miss-matched";
                 return response()->json(['message'=>$message], 422);
@@ -144,18 +151,19 @@ class TicketingController extends Controller
             return response()->json(['msessage'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                Ticketing::findOrFail($id)->update([
-                    'invoiceId'     => $request->invoiceId,
-                    'agentId'       => $request->agentId,
-                    'BookingId'     => $request->BookingId,
-                    'stuffId'       => $request->stuffId,
-                    'route'         => $request->route,
-                    'cost'          => $request->cost,
-                    'type'          => $request->type,
-                    'airlines'      => $request->airlines,
-                    'issueTime'     => $request->issueTime,
-                    'status'        => $request->status,
-                    'updated_at'    => $updated_at
+                Deposit_request::findOrFail($id)->update([
+                    'agentId'          => $request->agentId,
+                    'depositId'        => $request->depositId,
+                    'sender'           => $request->sender,
+                    'reciever'         => $request->reciever,
+                    'paymentway'       => $request->paymentway,
+                    'paymentmethod'    => $request->paymentmethod,
+                    'transactionId'    => $request->transactionId,
+                    'ref'              => $request->ref,
+                    'amount'           => $request->amount,
+                    'attachment'       => $request->attachment,
+                    'status'           => $request->status,                    
+                    'updated_at'       => $updated_at
                 ]);
                 return response()->json([
                     'success' => 'Updated Successfully',                       
@@ -181,7 +189,7 @@ class TicketingController extends Controller
             return response()->json(['message' => $message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                Ticketing::findOrFail($id)->delete();
+                Deposit_request::findOrFail($id)->delete();
                 return response()->json([
                 'Delete' => "Deleted successfully",
                 ]);

@@ -156,8 +156,8 @@ class BookingController extends Controller
             return response()->json(['message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $editClient = Booking::findOrFail($id);
-                return response()->json($editClient);
+                $editbooking = Booking::findOrFail($id);
+                return response()->json($editbooking);
             }else{
                 $message = "Authorization Token is miss-matched";
                 return response()->json(['message'=>$message], 422);

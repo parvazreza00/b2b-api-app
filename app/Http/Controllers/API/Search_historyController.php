@@ -4,10 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Ticketing;
+use App\Models\Search_history;
 use Carbon\Carbon;
 
-class TicketingController extends Controller
+class Search_historyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,7 +22,7 @@ class TicketingController extends Controller
             return response()->json(['Message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $bookingdata = Ticketing::all();
+                $bookingdata = Search_history::all();
                 return response()->json($bookingdata);
             }else{
                 $message = "Authorization Token is miss-matched";
@@ -50,17 +50,17 @@ class TicketingController extends Controller
     public function store(Request $request)
     {
         $created_at = Carbon::now();
+        $searchTime = Carbon::now();
+        $depTime    = Carbon::now();
+        
         $request->validate([
-               'invoiceId'  =>'required',         
+               'searchId'  =>'required',         
                'agentId'    =>'required',         
-               'BookingId'  =>'required',         
-               'stuffId'    =>'required',         
-               'route'      =>'required',         
-               'cost'       =>'required',         
-               'type'       =>'required',         
-               'airlines'   =>'required',         
-               'issueTime'  =>'required',         
-               'status'     =>'required'                        
+               'searchtype'  =>'required',         
+               'DepFrom'    =>'required',         
+               'ArrTo'      =>'required',         
+               'class'       =>'required',        
+                                       
         ]);  
 
         $header = $request->header("Authorization");
@@ -69,22 +69,24 @@ class TicketingController extends Controller
             return response()->json(['Message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $storeTicketingData = Ticketing::insert([
-                    'invoiceId'     => $request->invoiceId,
+                $storeSearchHistoryData = Search_history::insert([
+                    'searchId'      => $request->searchId,
                     'agentId'       => $request->agentId,
-                    'BookingId'     => $request->BookingId,
-                    'stuffId'       => $request->stuffId,
-                    'route'         => $request->route,
-                    'cost'          => $request->cost,
-                    'type'          => $request->type,
-                    'airlines'      => $request->airlines,
-                    'issueTime'     => $request->issueTime,
-                    'status'        => $request->status,
+                    'searchtype'   => $request->searchtype,
+                    'DepFrom'       => $request->DepFrom,
+                    'ArrTo'         => $request->ArrTo,
+                    'class'         => $request->class,
+                    'searchTime'    => $searchTime,
+                    'depTime'       => $depTime,
+                    'adult'         => $request->adult,
+                    'child'         => $request->child,
+                    'infant'        => $request->infant,
+                    'returnTime'    => Carbon::now(),                    
                     'created_at'    => $created_at                
                 ]); 
                 return response()->json([
                     'success' => 'Success', 
-                    'Ticketing' => $storeTicketingData,           
+                    'Ticketing' => $storeSearchHistoryData,           
                 ]);
             }else{
                 $message="Authorization Token is miss-matched";
@@ -101,7 +103,7 @@ class TicketingController extends Controller
      */
     public function show($id)
     {
-        
+        //
     }
 
     /**
@@ -118,8 +120,8 @@ class TicketingController extends Controller
             return response()->json(['message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $editticketing = Ticketing::findOrFail($id);
-                return response()->json($editticketing);
+                $editSearch_history = Search_history::findOrFail($id);
+                return response()->json($editSearch_history);
             }else{
                 $message = "Authorization Token is miss-matched";
                 return response()->json(['message'=>$message], 422);
@@ -144,17 +146,19 @@ class TicketingController extends Controller
             return response()->json(['msessage'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                Ticketing::findOrFail($id)->update([
-                    'invoiceId'     => $request->invoiceId,
+                Search_history::findOrFail($id)->update([
+                    'searchId'      => $request->searchId,
                     'agentId'       => $request->agentId,
-                    'BookingId'     => $request->BookingId,
-                    'stuffId'       => $request->stuffId,
-                    'route'         => $request->route,
-                    'cost'          => $request->cost,
-                    'type'          => $request->type,
-                    'airlines'      => $request->airlines,
-                    'issueTime'     => $request->issueTime,
-                    'status'        => $request->status,
+                    'searchtype'   => $request->searchtype,
+                    'DepFrom'       => $request->DepFrom,
+                    'ArrTo'         => $request->ArrTo,
+                    'class'         => $request->class,
+                    'searchTime'    => Carbon::now(),
+                    'depTime'       => Carbon::now(),
+                    'adult'         => $request->adult,
+                    'child'         => $request->child,
+                    'infant'        => $request->infant,
+                    'returnTime'    => Carbon::now(),   
                     'updated_at'    => $updated_at
                 ]);
                 return response()->json([
@@ -181,7 +185,7 @@ class TicketingController extends Controller
             return response()->json(['message' => $message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                Ticketing::findOrFail($id)->delete();
+                Search_history::findOrFail($id)->delete();
                 return response()->json([
                 'Delete' => "Deleted successfully",
                 ]);

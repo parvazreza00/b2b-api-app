@@ -4,10 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Ticketing;
+use App\Models\ActivityLog;
 use Carbon\Carbon;
 
-class TicketingController extends Controller
+
+class ActivityLogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,8 +23,8 @@ class TicketingController extends Controller
             return response()->json(['Message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $bookingdata = Ticketing::all();
-                return response()->json($bookingdata);
+                $activityLogdata = ActivityLog::all();
+                return response()->json($activityLogdata);
             }else{
                 $message = "Authorization Token is miss-matched";
                 return response()->json(['Message'=>$message], 422);
@@ -49,18 +50,11 @@ class TicketingController extends Controller
      */
     public function store(Request $request)
     {
-        $created_at = Carbon::now();
-        $request->validate([
-               'invoiceId'  =>'required',         
-               'agentId'    =>'required',         
-               'BookingId'  =>'required',         
-               'stuffId'    =>'required',         
-               'route'      =>'required',         
-               'cost'       =>'required',         
-               'type'       =>'required',         
-               'airlines'   =>'required',         
-               'issueTime'  =>'required',         
-               'status'     =>'required'                        
+            $request->validate([
+               'reference'  =>'required',         
+               'name'    =>'required',         
+               'empId'  =>'required',         
+               'activity'    =>'required'                             
         ]);  
 
         $header = $request->header("Authorization");
@@ -69,22 +63,16 @@ class TicketingController extends Controller
             return response()->json(['Message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $storeTicketingData = Ticketing::insert([
-                    'invoiceId'     => $request->invoiceId,
-                    'agentId'       => $request->agentId,
-                    'BookingId'     => $request->BookingId,
-                    'stuffId'       => $request->stuffId,
-                    'route'         => $request->route,
-                    'cost'          => $request->cost,
-                    'type'          => $request->type,
-                    'airlines'      => $request->airlines,
-                    'issueTime'     => $request->issueTime,
-                    'status'        => $request->status,
-                    'created_at'    => $created_at                
-                ]); 
+                $storeActivityLogData = ActivityLog::insert([
+                        "reference"      => $request->reference,       
+                        "name"           => $request->name,       
+                        "empId"          => $request->empId,       
+                        "activity"       => $request->activity,       
+                        "created_at"     => Carbon::now(),                                      
+            ]); 
                 return response()->json([
                     'success' => 'Success', 
-                    'Ticketing' => $storeTicketingData,           
+                    'Ticketing' => $storeActivityLogData,           
                 ]);
             }else{
                 $message="Authorization Token is miss-matched";
@@ -101,7 +89,7 @@ class TicketingController extends Controller
      */
     public function show($id)
     {
-        
+        //
     }
 
     /**
@@ -118,8 +106,8 @@ class TicketingController extends Controller
             return response()->json(['message'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                $editticketing = Ticketing::findOrFail($id);
-                return response()->json($editticketing);
+                $editbooking = ActivityLog::findOrFail($id);
+                return response()->json($editbooking);
             }else{
                 $message = "Authorization Token is miss-matched";
                 return response()->json(['message'=>$message], 422);
@@ -136,26 +124,18 @@ class TicketingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updated_at = Carbon::now();
-
         $header=$request->header("Authorization");
         if($header==''){
             $message="Authorization is required";
             return response()->json(['msessage'=>$message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                Ticketing::findOrFail($id)->update([
-                    'invoiceId'     => $request->invoiceId,
-                    'agentId'       => $request->agentId,
-                    'BookingId'     => $request->BookingId,
-                    'stuffId'       => $request->stuffId,
-                    'route'         => $request->route,
-                    'cost'          => $request->cost,
-                    'type'          => $request->type,
-                    'airlines'      => $request->airlines,
-                    'issueTime'     => $request->issueTime,
-                    'status'        => $request->status,
-                    'updated_at'    => $updated_at
+                ActivityLog::findOrFail($id)->update([
+                    'reference'     => $request->reference,
+                    'name'       => $request->name,
+                    'empId'     => $request->empId,
+                    'activity'       => $request->activity,                    
+                    'updated_at'    => Carbon::now()
                 ]);
                 return response()->json([
                     'success' => 'Updated Successfully',                       
@@ -181,7 +161,7 @@ class TicketingController extends Controller
             return response()->json(['message' => $message], 422);
         }else{
             if($header=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZseWZhcmludCIsImlhdCI6MTUxNjIzOTAyMn0.kuYVlB9XaphllxKxlmlI-LidbDaUodL58kL8jxG0ANM'){
-                Ticketing::findOrFail($id)->delete();
+                ActivityLog::findOrFail($id)->delete();
                 return response()->json([
                 'Delete' => "Deleted successfully",
                 ]);

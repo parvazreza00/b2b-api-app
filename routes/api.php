@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\clientController;
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\TicketingController;
+use App\Http\Controllers\API\Deposit_requestController;
+use App\Http\Controllers\API\Search_historyController;
+use App\Http\Controllers\API\ActivityLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +44,24 @@ Route::post('/store_ticketing', [TicketingController::class, 'store']);
 Route::get('/edit_ticketing/{id}', [TicketingController::class, 'edit']);
 Route::put('/update_ticketing/{id}', [TicketingController::class, 'update']);
 Route::delete('/delete_ticketing/{id}', [TicketingController::class, 'destroy']);
+
+//deposit_request information route
+Route::get('/alldeposit_request', [Deposit_requestController::class, 'index']);
+Route::post('/store_deposit_request', [Deposit_requestController::class, 'store']);
+Route::get('/edit_deposit_request/{id}', [Deposit_requestController::class, 'edit']);
+Route::put('/update_deposit_request/{id}', [Deposit_requestController::class, 'update']);
+Route::delete('/delete_deposit_request/{id}', [Deposit_requestController::class, 'destroy']);
+
+//search_history information route
+Route::get('/allsearch_history', [Search_historyController::class, 'index']);
+Route::post('/store_search_history', [Search_historyController::class, 'store']);
+Route::get('/edit_search_history/{id}', [Search_historyController::class, 'edit']);
+Route::put('/update_search_history/{id}', [Search_historyController::class, 'update']);
+Route::delete('/delete_search_history/{id}', [Search_historyController::class, 'destroy']);
+
+//activityLog information route
+Route::get('/allactivityLog', [ActivityLogController::class, 'index']);
+Route::post('/store_activityLog', [ActivityLogController::class, 'store']);
+Route::get('/edit_activityLog/{id}', [ActivityLogController::class, 'edit']);
+Route::put('/update_activityLog/{id}', [ActivityLogController::class, 'update']);
+Route::delete('/delete_activityLog/{id}', [ActivityLogController::class, 'destroy']);
