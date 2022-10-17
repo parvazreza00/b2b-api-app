@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\clientController;
 use App\Http\Controllers\API\BookingController;
+use App\Http\Controllers\API\TicketingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +34,10 @@ Route::post('/store_booking', [BookingController::class, 'store']);
 Route::get('/editbooking/{id}', [BookingController::class, 'edit']);
 Route::put('/updatebooking/{id}', [BookingController::class, 'update']);
 Route::delete('/deletebooking/{id}', [BookingController::class, 'destroy']);
+
+//ticketing information route
+Route::get('/allticketing', [TicketingController::class, 'index']);
+Route::post('/store_ticketing', [TicketingController::class, 'store']);
+Route::get('/edit_ticketing/{id}', [TicketingController::class, 'edit']);
+Route::put('/update_ticketing/{id}', [TicketingController::class, 'update']);
+Route::delete('/delete_ticketing/{id}', [TicketingController::class, 'destroy']);
