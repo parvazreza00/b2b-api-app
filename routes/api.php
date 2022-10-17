@@ -8,6 +8,9 @@ use App\Http\Controllers\API\TicketingController;
 use App\Http\Controllers\API\Deposit_requestController;
 use App\Http\Controllers\API\Search_historyController;
 use App\Http\Controllers\API\ActivityLogController;
+use App\Http\Controllers\API\Client_ledgerController;
+use App\Http\Controllers\API\PassengerController;
+use App\Http\Controllers\API\GroupFareController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,3 +68,24 @@ Route::post('/store_activityLog', [ActivityLogController::class, 'store']);
 Route::get('/edit_activityLog/{id}', [ActivityLogController::class, 'edit']);
 Route::put('/update_activityLog/{id}', [ActivityLogController::class, 'update']);
 Route::delete('/delete_activityLog/{id}', [ActivityLogController::class, 'destroy']);
+
+//client_ledger information route
+Route::get('/allclient_ledger', [Client_ledgerController::class, 'index']);
+Route::post('/store_client_ledger', [Client_ledgerController::class, 'store']);
+Route::get('/edit_client_ledger/{id}', [Client_ledgerController::class, 'edit']);
+Route::put('/update_client_ledger/{id}', [Client_ledgerController::class, 'update']);
+Route::delete('/delete_client_ledger/{id}', [Client_ledgerController::class, 'destroy']);
+
+//passenger information route
+Route::get('/allpassenger', [PassengerController::class, 'index']);
+Route::post('/store_passenger', [PassengerController::class, 'store']);
+Route::get('/edit_passenger/{id}', [PassengerController::class, 'edit']);
+Route::put('/update_passenger/{id}', [PassengerController::class, 'update']);
+Route::delete('/delete_passenger/{id}', [PassengerController::class, 'destroy']);
+
+//GroupFare information route
+Route::get('/allGroupFare', [GroupFareController::class, 'index']);
+Route::post('/storeGroupFare', [GroupFareController::class, 'store']);
+Route::get('/editGroupFare/{id}', [GroupFareController::class, 'edit']);
+Route::put('/updateGroupFare/{id}', [GroupFareController::class, 'update']);
+Route::delete('/deleteGroupFare/{id}', [GroupFareController::class, 'destroy']);
